@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="FBA Calc" />
+
+  <title>FBA Calc · Amazon España</title>
+
+  <style>
+    :root {
+      --black: #070707;
+      --black-soft: #151515;
+      --white: #ffffff;
+      --cream: #f7f4ef;
+      --cream-2: #fffaf4;
+      --grey: #8a8a8a;
+      --grey-dark: #4a4a4a;
+      --line: rgba(0,0,0,0.08);
+      --orange: #ff6a00;
+      --orange-soft: #fff1e7;
+      --green: #16a34a;
+      --yellow: #facc15;
+      --red: #dc2626;
+      --orange-mid: #f97316;
+      --shadow: 0 24px 70px rgba(0,0,0,0.13);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--black);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(255,106,0,0.18), transparent 34%),
+        radial-gradient(circle at 90% 100%, rgba(255,106,0,0.12), transparent 34%),
+        linear-gradient(160deg, #ffffff 0%, #f7f4ef 52%, #ffffff 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 18px 14px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 430px;
+    }
+
+    .main-card {
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 38px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at 90% 0%, rgba(255,106,0,0.30), transparent 38%),
+        linear-gradient(145deg, #080808 0%, #171717 100%);
+      color: var(--white);
+      padding: 24px 22px 25px;
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--orange), #ff9a3d);
+      color: #111;
+      display: grid;
+      place-items: center;
+      font-weight: 1000;
+      letter-spacing: -0.8px;
+      box-shadow: 0 14px 34px rgba(255,106,0,0.34);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 26px;
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      color: rgba(255,255,255,0.62);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 8px 11px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #ffd7bd;
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .result {
+      margin-top: 24px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 950;
+      background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.70);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .status.green {
+      background: var(--green);
+      color: white;
+    }
+
+    .status.yellow {
+      background: var(--yellow);
+      color: #161000;
+    }
+
+    .status.orange {
+      background: var(--orange-mid);
+      color: white;
+    }
+
+    .status.red {
+      background: var(--red);
+      color: white;
+    }
+
+    .profit {
+      margin: 16px 0 0;
+      font-size: 45px;
+      line-height: 0.9;
+      letter-spacing: -2px;
+      font-weight: 1000;
+    }
+
+    .profit.negative {
+      color: #ff8a8a;
+    }
+
+    .summary {
+      margin: 12px 0 0;
+      color: rgba(255,255,255,0.66);
+      font-size: 15px;
+      line-height: 1.36;
+      font-weight: 650;
+    }
+
+    .summary strong {
+      color: white;
+    }
+
+    .content {
+      padding: 18px;
+    }
+
+    .input-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .input-box {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 15px 16px 13px;
+      box-shadow: 0 8px 26px rgba(0,0,0,0.035);
+      transition: 0.18s ease;
+    }
+
+    .input-box:focus-within {
+      transform: translateY(-1px);
+      border-color: rgba(255,106,0,0.55);
+      box-shadow: 0 14px 34px rgba(255,106,0,0.11);
+    }
+
+    label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      color: var(--grey);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.15px;
+    }
+
+    .mini {
+      color: var(--orange);
+      font-size: 10.5px;
+      font-weight: 1000;
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--black);
+      font-size: 28px;
+      font-weight: 950;
+      letter-spacing: -0.9px;
+      padding: 0;
+      appearance: none;
+    }
+
+    input::placeholder {
+      color: #c5beb7;
+    }
+
+    .euro {
+      color: var(--orange);
+      font-size: 21px;
+      font-weight: 1000;
+    }
+
+    .mini-minimum {
+      margin-top: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 15px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #fff7f0, #ffffff);
+      border: 1px solid rgba(255,106,0,0.18);
+      box-shadow: 0 10px 26px rgba(255,106,0,0.08);
+    }
+
+    .mini-minimum-left {
+      min-width: 0;
+    }
+
+    .mini-minimum-title {
+      margin: 0;
+      color: var(--orange);
+      font-size: 11px;
+      font-weight: 1000;
+      letter-spacing: 0.35px;
+      text-transform: uppercase;
+    }
+
+    .mini-minimum-text {
+      margin: 5px 0 0;
+      color: #746b63;
+      font-size: 12.5px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .mini-minimum-price {
+      flex-shrink: 0;
+      color: var(--black);
+      font-size: 24px;
+      font-weight: 1000;
+      letter-spacing: -0.8px;
+      white-space: nowrap;
+    }
+
+    .breakdown {
+      display: grid;
+      gap: 8px;
+      margin-top: 13px;
+      padding: 14px 15px;
+      border-radius: 20px;
+      background: #faf8f5;
+      border: 1px solid rgba(0,0,0,0.05);
+      font-size: 12px;
+      color: var(--grey);
+    }
+
+    .break-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .break-row span:last-child {
+      color: var(--black);
+      font-weight: 900;
+    }
+
+    .meter {
+      margin-top: 13px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    .meter-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: var(--orange);
+      transition: width 0.35s ease, background 0.35s ease;
+    }
+
+    .button-row {
+      margin-top: 14px;
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 20px;
+      padding: 15px 16px;
+      background: var(--black);
+      color: white;
+      font-size: 15px;
+      font-weight: 950;
+      cursor: pointer;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.20);
+    }
+
+    button:active {
+      transform: scale(0.985);
+    }
+
+    .note {
+      margin: 14px 6px 0;
+      color: var(--grey);
+      text-align: center;
+      font-size: 11.5px;
+      line-height: 1.35;
+      font-weight: 650;
+    }
+
+    .footer {
+      margin-top: 13px;
+      text-align: center;
+      color: #aaa29a;
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: 0.2px;
+    }
+
+    @media (max-width: 370px) {
+      .hero {
+        padding: 22px 19px 24px;
+      }
+
+      .profit {
+        font-size: 39px;
+      }
+
+      input {
+        font-size: 25px;
+      }
+
+      .mini-minimum {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .mini-minimum-price {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <section class="main-card">
+      <section class="hero">
+        <header class="top">
+          <div class="brand">
+            <div class="logo">FBA</div>
+            <div>
+              <h1>FBA Calc</h1>
+              <p class="subtitle">Rentabilidad rápida para Amazon España</p>
+            </div>
+          </div>
+          <div class="pill">PRO</div>
+        </header>
+
+        <section class="result">
+          <div class="status" id="status">
+            <span class="dot"></span>
+            Esperando datos
+          </div>
+
+          <h2 class="profit" id="profit">—</h2>
+
+          <p class="summary" id="summary">
+            Introduce los datos para calcular.
+          </p>
+
+          <div class="meter">
+            <div class="meter-fill" id="meterFill"></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="content">
+        <section class="input-grid">
+          <div class="input-box">
+            <label for="coste">
+              Coste puesto en España
+              <span class="mini">COMPRA + ENVÍO</span>
+            </label>
+            <div class="input-row">
+              <input id="coste" inputmode="decimal" autocomplete="off" placeholder="Ej: 12" />
+              <span class="euro">€</span>
+            </div>
+          </div>
+
+          <div class="input-box">
+            <label for="venta">
+              Precio venta Amazon
+              <span class="mini">PVP</span>
+            </label>
+            <div class="input-row">
+              <input id="venta" inputmode="decimal" autocomplete="off" placeholder="Ej: 29,99" />
+              <span class="euro">€</span>
+            </div>
+          </div>
+
+          <div class="input-box">
+            <label for="fba">
+              Envío FBA Amazon
+              <span class="mini">EDITABLE</span>
+            </label>
+            <div class="input-row">
+              <input id="fba" inputmode="decimal" autocomplete="off" value="4,50" />
+              <span class="euro">€</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="mini-minimum">
+          <div class="mini-minimum-left">
+            <p class="mini-minimum-title">Precio mínimo para 20% neto</p>
+            <p class="mini-minimum-text" id="minimumText">
+              Introduce el coste y envío FBA para calcularlo.
+            </p>
+          </div>
+          <div class="mini-minimum-price" id="minimumPrice">—</div>
+        </section>
+
+        <section class="breakdown" id="breakdown" style="display:none;">
+          <div class="break-row">
+            <span>IVA venta 21%</span>
+            <span id="ivaOut">—</span>
+          </div>
+          <div class="break-row">
+            <span>Comisión Amazon 15%</span>
+            <span id="commissionOut">—</span>
+          </div>
+          <div class="break-row">
+            <span>Envío FBA</span>
+            <span id="fbaOut">—</span>
+          </div>
+        </section>
+
+        <div class="button-row">
+          <button id="clearBtn">Limpiar</button>
+        </div>
+
+        <p class="note">
+          Estimación con IVA 21%, comisión Amazon 15% y envío FBA editable.
+        </p>
+      </section>
+    </section>
+
+    <div class="footer">
+      Calculadora privada · Amazon FBA
+    </div>
+  </main>
+
+  <script>
+    const costeInput = document.getElementById("coste");
+    const ventaInput = document.getElementById("venta");
+    const fbaInput = document.getElementById("fba");
+
+    const statusEl = document.getElementById("status");
+    const profitEl = document.getElementById("profit");
+    const summaryEl = document.getElementById("summary");
+    const meterFill = document.getElementById("meterFill");
+
+    const minimumPrice = document.getElementById("minimumPrice");
+    const minimumText = document.getElementById("minimumText");
+
+    const breakdown = document.getElementById("breakdown");
+    const ivaOut = document.getElementById("ivaOut");
+    const commissionOut = document.getElementById("commissionOut");
+    const fbaOut = document.getElementById("fbaOut");
+
+    const clearBtn = document.getElementById("clearBtn");
+
+    function parseNumber(value) {
+      if (!value) return NaN;
+      return Number(String(value).replace(/\s/g, "").replace(",", "."));
+    }
+
+    function formatEuro(value) {
+      return value.toLocaleString("es-ES", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }) + " €";
+    }
+
+    function formatPercent(value) {
+      return value.toLocaleString("es-ES", {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1
+      }) + "%";
+    }
+
+    function resetStatus() {
+      statusEl.className = "status";
+      profitEl.className = "profit";
+    }
+
+    function setStatus(color, text) {
+      resetStatus();
+      if (color) statusEl.classList.add(color);
+      statusEl.innerHTML = '<span class="dot"></span>' + text;
+    }
+
+    function calculateMinimumPrice(coste, fba) {
+      return (coste + fba) / 0.44;
+    }
+
+    function updateMinimum(coste, venta, fba) {
+      if (isNaN(coste) || isNaN(fba) || coste < 0 || fba < 0) {
+        minimumPrice.textContent = "—";
+        minimumText.textContent = "Introduce el coste y envío FBA para calcularlo.";
+        return;
+      }
+
+      const minPrice = calculateMinimumPrice(coste, fba);
+      minimumPrice.textContent = formatEuro(minPrice);
+
+      if (!isNaN(venta) && venta > 0) {
+        const diff = venta - minPrice;
+
+        if (diff >= 0) {
+          minimumText.innerHTML = "Tu PVP supera el mínimo por <strong>" + formatEuro(diff) + "</strong>.";
+        } else {
+          minimumText.innerHTML = "Te faltarían <strong>" + formatEuro(Math.abs(diff)) + "</strong> para llegar al 20%.";
+        }
+      } else {
+        minimumText.textContent = "PVP mínimo aproximado para conseguir 20% neto.";
+      }
+    }
+
+    function calculate() {
+      const coste = parseNumber(costeInput.value);
+      const venta = parseNumber(ventaInput.value);
+      const fba = parseNumber(fbaInput.value);
+
+      localStorage.setItem("fba_coste", costeInput.value);
+      localStorage.setItem("fba_venta", ventaInput.value);
+      localStorage.setItem("fba_envio", fbaInput.value);
+
+      updateMinimum(coste, venta, fba);
+
+      if (isNaN(coste) || isNaN(venta) || isNaN(fba) || venta <= 0) {
+        setStatus("", "Esperando datos");
+        profitEl.textContent = "—";
+        summaryEl.textContent = "Introduce los datos para calcular.";
+        meterFill.style.width = "0%";
+        meterFill.style.background = "var(--orange)";
+        breakdown.style.display = "none";
+        return;
+      }
+
+      const iva = venta * 0.21;
+      const commission = venta * 0.15;
+      const profit = venta - iva - commission - fba - coste;
+      const margin = (profit / venta) * 100;
+
+      let color = "red";
+      let text = "No rentable";
+
+      if (margin >= 20) {
+        color = "green";
+        text = "Rentable";
+      } else if (margin >= 15) {
+        color = "yellow";
+        text = "Aceptable";
+      } else if (margin >= 10) {
+        color = "orange";
+        text = "Muy justo";
+      } else {
+        color = "red";
+        text = "No rentable";
+      }
+
+      setStatus(color, text);
+
+      if (profit < 0) {
+        profitEl.classList.add("negative");
+      }
+
+      profitEl.textContent = formatEuro(profit);
+
+      if (profit >= 0) {
+        summaryEl.innerHTML =
+          "Ganas <strong>" + formatEuro(profit) + "</strong> por unidad · Margen neto: <strong>" + formatPercent(margin) + "</strong>";
+      } else {
+        summaryEl.innerHTML =
+          "Pierdes <strong>" + formatEuro(Math.abs(profit)) + "</strong> por unidad · Margen neto: <strong>" + formatPercent(margin) + "</strong>";
+      }
+
+      const width = Math.max(0, Math.min(margin, 30)) / 30 * 100;
+      meterFill.style.width = width + "%";
+
+      if (color === "green") meterFill.style.background = "var(--green)";
+      if (color === "yellow") meterFill.style.background = "var(--yellow)";
+      if (color === "orange") meterFill.style.background = "var(--orange-mid)";
+      if (color === "red") meterFill.style.background = "var(--red)";
+
+      ivaOut.textContent = formatEuro(iva);
+      commissionOut.textContent = formatEuro(commission);
+      fbaOut.textContent = formatEuro(fba);
+      breakdown.style.display = "grid";
+    }
+
+    [costeInput, ventaInput, fbaInput].forEach(input => {
+      input.addEventListener("input", calculate);
+
+      input.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+          input.blur();
+          calculate();
+        }
+      });
+
+      input.addEventListener("focus", () => input.select());
+    });
+
+    clearBtn.addEventListener("click", () => {
+      costeInput.value = "";
+      ventaInput.value = "";
+      fbaInput.value = "4,50";
+
+      localStorage.removeItem("fba_coste");
+      localStorage.removeItem("fba_venta");
+      localStorage.setItem("fba_envio", "4,50");
+
+      calculate();
+      costeInput.focus();
+    });
+
+    window.addEventListener("load", () => {
+      const savedCoste = localStorage.getItem("fba_coste");
+      const savedVenta = localStorage.getItem("fba_venta");
+      const savedEnvio = localStorage.getItem("fba_envio");
+
+      if (savedCoste !== null) costeInput.value = savedCoste;
+      if (savedVenta !== null) ventaInput.value = savedVenta;
+      if (savedEnvio !== null) fbaInput.value = savedEnvio || "4,50";
+
+      calculate();
+    });
+  </script>
+</body>
+</html>
